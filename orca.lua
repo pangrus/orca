@@ -64,7 +64,7 @@ local selected_area_y, selected_area_x, bounds_x, bounds_y = 1, 1, 25, 8
 local bar = true
 local help, map, shift, alt, ctrl = false
 local hood = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
-local dot_density = 7
+local dot_density = 10
 local copy_buffer = {}
 local pt = {}
 local w = 128
@@ -748,13 +748,13 @@ end
 
 local function draw_op_frame(x, y, b)
   screen.level(b)
-  screen.rect((x * 5) - 5, ((y * 8) - 5) - 3, 5, 8)
+  screen.rect((x * 5) - 5, ((y * 8) - 5) - 3, 6, 8)
   screen.fill()
 end
 
 local function draw_grid()
-  screen.font_face(25)
-  screen.font_size(6)
+  screen.font_face(0)
+  screen.font_size(8)
   for y = 1, bounds_y do
     for x = 1, bounds_x do
       local y = y + field_offset_y
@@ -780,6 +780,7 @@ local function draw_grid()
       screen.move(((x - field_offset_x) * 5) - 4, ((y - field_offset_y)* 8) - (cell and 2 or 3))
 
       if cell == "." or cell == nil then
+        screen.move(((x - field_offset_x ) * 5) - 2, ((y - field_offset_y)* 8) - (cell and 2 or 3) - 1 )
         screen.text(f.dot and "." or ofst and (dot_density > 4 and "+") or ".")
       else
         screen.text(cell)
@@ -804,13 +805,13 @@ local function draw_cursor(x, y)
   local cell = orca.cell[y_index][x_index]
 
   screen.level(cell == "." and 2 or 15)
-  screen.rect(x_pos, y_pos, 5, 8)
+  screen.rect(x_pos, y_pos, 6, 8)
   screen.fill()
-  screen.font_face(cell == "." and 0 or 25)
-  screen.font_size(cell == "." and 8 or 6)
+  screen.font_face(0)
+  screen.font_size(8)
   screen.level(cell == "." and 14 or 1)
   screen.move(x_pos + ((cell ~= ".") and 1 or 0), y_pos + 6)
-  screen.text((cell == "." or cell == nil) and "@" or cell)
+  screen.text((cell == "." or cell == nil) and " " or cell)
   screen.stroke()
 end
 
@@ -823,8 +824,8 @@ local function draw_bar()
   screen.level(9)
   screen.move(2, 63)
 
-  screen.font_face(25)
-  screen.font_size(6)
+  screen.font_face(0)
+  screen.font_size(8)
   screen.text(string.sub(text, 0, 12))
   screen.stroke()
 
